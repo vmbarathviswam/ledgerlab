@@ -45,6 +45,17 @@
           </div>
         </section>
 
+        <section class="panel webmcp-panel" aria-labelledby="webmcp-tools-title">
+          <div class="panel-header">
+            <div><p class="section-kicker">BROWSER CHECK</p><h2 id="webmcp-tools-title">WebMCP tools</h2><p class="panel-subtitle">Live discovery from this page — no DevTools console required.</p></div>
+            <button id="refresh-webmcp-tools" class="button button-ghost button-small" type="button">Refresh list</button>
+          </div>
+          <div class="webmcp-diagnostics-body">
+            <div class="diagnostic-status"><span id="diagnostic-dot" class="diagnostic-dot"></span><span id="diagnostic-status">Checking the browser API…</span></div>
+            <ul id="webmcp-tool-list" class="webmcp-tool-list" aria-label="Registered WebMCP tools"></ul>
+          </div>
+        </section>
+
         <section class="metric-grid" aria-label="Account summary">
           <article class="metric-card metric-card-primary">
             <div class="metric-heading"><span>Total balance</span><span class="metric-icon">↗</span></div>

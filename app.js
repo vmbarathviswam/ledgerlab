@@ -208,6 +208,23 @@
     toolDefinitions.forEach((definition) => context.registerTool({ ...definition, execute: async (args) => toolExecutors[definition.name](args || {}) }));
     $("agent-status").textContent = "WebMCP connected"; $("tool-count").textContent = `${toolDefinitions.length} structured tools ready`;
     logActivity(`${toolDefinitions.length} structured tools registered for your agent.`, "system");
+    window.setTimeout(() => refreshWebMCPDiagnostics(context), 100);
+  }
+
+  async function refreshWebMCPDiagnostics(contextOverride) {
+    const status = $("diagnostic-status"); const dot = $("diagnostic-dot"); const list = $("webmcp-tool-list");
+    if (!status || !dot || !list) return;
+    const context = contextOverride || [document.modelContext, typeof navigator !== "undefined" ? navigator.modelContext : null, typeof navigator !== "undefined" ? navigator.modelContextTesting : null, typeof window !== "undefined" ? window.modelContext : null].find((candidate) => candidate && (typeof candidate.getTools === "function" || typeof candidate.listTools === "function"));
+    list.replaceChildren(); dot.className = "diagnostic-dot";
+    if (!context) { status.textContent = "WebMCP API is not available in this browser"; dot.classList.add("error"); return; }
+    try {
+      const result = typeof context.getTools === "function" ? await context.getTools() : await context.listTools();
+      const tools = Array.isArray(result) ? result : [];
+      if (!tools.length) { status.textContent = "API detected, but no tools were returned — refresh the page"; return; }
+      tools.map((tool) => tool && tool.name).filter(Boolean).sort().forEach((name) => { const item = document.createElement("li"); item.textContent = name; list.appendChild(item); });
+      status.textContent = `${tools.length} structured tools available to the browser agent`;
+      dot.classList.add("success");
+    } catch (error) { status.textContent = `Tool discovery failed: ${error.message || "unknown error"}`; dot.classList.add("error"); }
   }
 
   function undoLastAgentChange() {
@@ -250,7 +267,7 @@
     if (action === "delete-transaction") { const tx = transactionById(target.dataset.id); if (tx && window.confirm(`Delete ${tx.merchant}?`)) { const account = state.accounts.find((item) => item.id === tx.account); if (account) account.balance -= tx.amount; state.transactions = state.transactions.filter((item) => item.id !== tx.id); render(); toast("Transaction deleted"); logActivity(`You deleted ${tx.merchant}.`, "human"); } }
   }
 
-  document.addEventListener("DOMContentLoaded", () => { render(); registerWebMCP(); document.addEventListener("click", handleClick); $("undo-agent-change").addEventListener("click", undoLastAgentChange); $("add-transaction-button").addEventListener("click", () => transactionDialog("add")); $("transaction-form").addEventListener("submit", saveTransaction); $("cancel-dialog").addEventListener("click", () => $("transaction-dialog").close()); $("close-dialog").addEventListener("click", () => $("transaction-dialog").close()); });
+  document.addEventListener("DOMContentLoaded", () => { render(); registerWebMCP(); $("refresh-webmcp-tools").addEventListener("click", () => refreshWebMCPDiagnostics()); document.addEventListener("click", handleClick); $("undo-agent-change").addEventListener("click", undoLastAgentChange); $("add-transaction-button").addEventListener("click", () => transactionDialog("add")); $("transaction-form").addEventListener("submit", saveTransaction); $("cancel-dialog").addEventListener("click", () => $("transaction-dialog").close()); $("close-dialog").addEventListener("click", () => $("transaction-dialog").close()); });
 
   window.LedgerLab = { state, tools: toolDefinitions.map((tool) => tool.name), executeTool: (name, args) => toolExecutors[name] ? toolExecutors[name](args) : { ok: false, error: "Unknown tool" } };
 }());

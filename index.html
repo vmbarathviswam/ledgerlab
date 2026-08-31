@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="origin-trial" content="A6SCLzkhKijSF5LI1HObSDsPmn3dWcvXrfmXHmiQXdzy4Vtpo1jfv5nZAGpJ7BJXx71SfyQq8DiEOToUVs8chw4AAAB6eyJvcmlnaW4iOiJodHRwczovL2xlZGdlcmxhYi5wYWdlcy5kZXY6NDQzIiwiZmVhdHVyZSI6IldlYk1DUCIsImV4cGlyeSI6MTc5NDg3MzYwMCwiaXNTdWJkb21haW4iOnRydWUsImlzVGhpcmRQYXJ0eSI6dHJ1ZX0=" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d1b2a" />
+    <meta name="description" content="LedgerLab is a WebMCP-enabled personal budget co-pilot." />
+    <title>LedgerLab — Personal Budget Co-Pilot</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="LedgerLab home">
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span>Ledger<span class="brand-accent">Lab</span></span>
+        </a>
+        <div class="topbar-right">
+          <span class="period-pill"><span class="status-dot"></span> Demo workspace · August 2026</span>
+          <a class="avatar" href="#about" aria-label="Open about section">BV</a>
+        </div>
+      </header>
+
+      <div id="webmcp-banner" class="webmcp-banner is-hidden" role="status">
+        <span class="banner-icon">⌁</span>
+        <span><strong>WebMCP not detected</strong> — open in ChatGPT in-app browser or Chrome with WebMCP enabled</span>
+      </div>
+
+      <main id="top" class="main-content">
+        <section class="hero-row" aria-labelledby="welcome-title">
+          <div>
+            <p class="eyebrow">PERSONAL FINANCE · CO-PILOTED</p>
+            <h1 id="welcome-title">Your money, with a second pair of eyes.</h1>
+            <p class="hero-copy">Explore your mock ledger, then ask an agent to spot waste and draft a plan. You stay in control of every change.</p>
+          </div>
+          <div class="agent-status-card" aria-live="polite">
+            <div class="agent-orb">✦</div>
+            <div>
+              <p class="micro-label">AGENT CONNECTION</p>
+              <strong id="agent-status">Checking WebMCP…</strong>
+              <p id="tool-count" class="muted">Structured tools loading</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="metric-grid" aria-label="Account summary">
+          <article class="metric-card metric-card-primary">
+            <div class="metric-heading"><span>Total balance</span><span class="metric-icon">↗</span></div>
+            <strong id="total-balance" class="metric-value">$0.00</strong>
+            <span class="metric-foot positive">Across 3 accounts</span>
+          </article>
+          <article class="metric-card">
+            <div class="metric-heading"><span>Spent this month</span><span class="metric-icon coral">−</span></div>
+            <strong id="monthly-spend" class="metric-value">$0.00</strong>
+            <span id="spend-foot" class="metric-foot">vs. monthly budget</span>
+          </article>
+          <article class="metric-card">
+            <div class="metric-heading"><span>Available to plan</span><span class="metric-icon gold">✦</span></div>
+            <strong id="available-to-plan" class="metric-value">$0.00</strong>
+            <span class="metric-foot">Unallocated budget room</span>
+          </article>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="panel accounts-panel" aria-labelledby="accounts-title">
+            <div class="panel-header">
+              <div><p class="section-kicker">OVERVIEW</p><h2 id="accounts-title">Accounts</h2></div>
+              <span class="panel-action">Mock data</span>
+            </div>
+            <div id="accounts-list" class="accounts-list"></div>
+          </section>
+
+          <section class="panel categories-panel" aria-labelledby="categories-title">
+            <div class="panel-header">
+              <div><p class="section-kicker">WHERE IT GOES</p><h2 id="categories-title">Category pulse</h2></div>
+              <span class="legend"><span class="legend-dot budget-dot"></span>Budget <span class="legend-dot spent-dot"></span>Spent</span>
+            </div>
+            <div id="categories-list" class="category-list"></div>
+          </section>
+
+          <section class="panel plan-panel" aria-labelledby="plan-title">
+            <div class="panel-header">
+              <div><p class="section-kicker">HUMAN CHECKPOINT</p><h2 id="plan-title">Pending agent plan</h2></div>
+              <span id="plan-count" class="count-badge">0</span>
+            </div>
+            <div id="plans-list" class="plans-list">
+              <div class="empty-state plan-empty"><span class="empty-icon">✦</span><strong>No proposal yet</strong><span>Ask your agent to simulate a reallocation. Suggestions will land here for your review.</span></div>
+            </div>
+          </section>
+
+          <section class="panel activity-panel" aria-labelledby="activity-title">
+            <div class="panel-header">
+              <div><p class="section-kicker">TRANSPARENT BY DESIGN</p><h2 id="activity-title">Agent activity</h2></div>
+              <div class="activity-actions"><button id="undo-agent-change" class="button button-ghost button-small" type="button" disabled>Undo last agent change</button><span class="live-label"><span class="live-dot"></span>Live</span></div>
+            </div>
+            <div id="activity-log" class="activity-log" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <section class="panel transactions-panel" aria-labelledby="transactions-title">
+          <div class="panel-header transactions-header">
+            <div><p class="section-kicker">LEDGER</p><h2 id="transactions-title">Monthly transactions</h2><p class="panel-subtitle">August 2026 · <span id="transaction-count">0</span> transactions</p></div>
+            <button id="add-transaction-button" class="button button-primary" type="button">＋ Add transaction</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th scope="col">Date</th><th scope="col">Merchant</th><th scope="col">Category</th><th scope="col" class="amount-cell">Amount</th><th scope="col" class="actions-cell"><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="transactions-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="about" class="about-section">
+          <div class="about-mark">✦</div>
+          <div><p class="section-kicker">ABOUT LEDGERLAB</p><h2>Useful because you remain in the loop.</h2><p>LedgerLab exposes structured, purpose-built tools to an in-browser agent. The agent can inspect the same mock data you see, compute a recommendation, and hand it back as a clear proposal. You approve the consequential step; the dashboard updates in front of you.</p></div>
+          <div class="about-links"><a href="README.md">Read the README</a><a href="LICENSE">MIT License</a></div>
+        </section>
+      </main>
+
+      <footer class="footer"><span>LedgerLab · OpenAI WebMCP Challenge 2026</span><span>All data is fictional and stored locally in your browser.</span></footer>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+    <dialog id="transaction-dialog" class="transaction-dialog">
+      <form id="transaction-form" method="dialog">
+        <div class="dialog-header"><div><p class="section-kicker">LEDGER ENTRY</p><h2 id="dialog-title">Add transaction</h2></div><button id="close-dialog" class="icon-button" type="button" aria-label="Close dialog">×</button></div>
+        <input id="transaction-id" type="hidden" />
+        <div class="form-grid">
+          <label>Merchant<input id="transaction-merchant" required maxlength="48" placeholder="e.g. Corner Market" /></label>
+          <label>Date<input id="transaction-date" required type="date" /></label>
+          <label>Amount<input id="transaction-amount" required min="0.01" step="0.01" type="number" placeholder="0.00" /></label>
+          <label>Type<select id="transaction-type"><option value="expense">Expense</option><option value="income">Income</option></select></label>
+          <label class="full-field">Category<select id="transaction-category"></select></label>
+        </div>
+        <div class="dialog-actions"><button id="cancel-dialog" class="button button-ghost" type="button">Cancel</button><button class="button button-primary" type="submit">Save transaction</button></div>
+      </form>
+    </dialog>
+  </body>
+</html>

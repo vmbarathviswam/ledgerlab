@@ -8,12 +8,13 @@
     <title>LedgerLab — Your money, with a second pair of eyes.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="landing.css" />
+    <link rel="stylesheet" href="os-theme.css" />
     <script src="https://unpkg.com/lucide@latest"></script>
     <script defer src="landing.js"></script>
   </head>
-  <body>
+  <body class="os-theme">
     <div class="page-orb orb-one"></div><div class="page-orb orb-two"></div><div class="page-orb orb-three"></div>
     <nav class="nav glass" aria-label="Main navigation">
       <a class="logo" href="#top" aria-label="LedgerLab home"><span class="logo-icon"><i data-lucide="wallet"></i><i data-lucide="sparkles" class="logo-sparkle"></i></span><span>Ledger<span class="purple-text">Lab</span></span></a>
@@ -24,12 +25,15 @@
     <main id="top">
       <section class="hero section-grid" id="product">
         <div class="hero-copy">
-          <p class="eyebrow"><i data-lucide="sparkles"></i> PERSONAL FINANCE, RE-IMAGINED</p>
+          <p class="eyebrow"><i data-lucide="sparkles"></i> PERSONAL FINANCE OPERATING SYSTEM</p>
           <h1>Your money, with a <span class="rainbow-text">second pair of eyes.</span></h1>
           <p class="hero-subhead">LedgerLab gives your browser agent a structured view of your mock ledger — so it can spot waste, model a move, and bring the decision back to you.</p>
           <p class="not-another"><strong>It's not</strong> another budgeting app that nags you — <strong>it's</strong> a co-pilot that reads your ledger, spots the waste, and hands you a plan to approve.</p>
           <div class="hero-actions"><a class="button button-gradient" href="index.html">Try the live app <i data-lucide="arrow-right"></i></a><a class="button button-glass" href="#playground">Explore the playground <i data-lucide="move-down"></i></a></div>
           <div class="hero-proof"><span class="proof-avatars"><span>BV</span><span>AI</span><span>◎</span></span><span>Built for the human-agent loop</span><span class="proof-line"></span><span>100% fictional data</span></div>
+          <div class="hero-system-rail" aria-label="LedgerLab collaboration workflow">
+            <span><b>01</b> Read ledger</span><span><b>02</b> Find signal</span><span><b>03</b> Simulate move</span><span><b>04</b> Human approves</span>
+          </div>
         </div>
         <div class="hero-visual">
           <div class="hero-ring"></div><div class="hero-ring ring-two"></div>

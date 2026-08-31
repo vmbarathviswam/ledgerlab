@@ -10,45 +10,21 @@
 
   const state = {
     accounts: [
-      { id: "checking", name: "Everyday checking", type: "Checking account", balance: 3420.50 },
-      { id: "savings", name: "Rainy day fund", type: "Savings account", balance: 12450.00 },
-      { id: "credit", name: "Travel rewards", type: "Credit card", balance: -680.75 }
+      { id: "checking", name: "Everyday checking", type: "Fresh ledger", balance: 0 }
     ],
     categories: [
-      { id: "housing", name: "Housing", budget: 1850, color: "teal" },
-      { id: "groceries", name: "Groceries", budget: 520, color: "teal" },
-      { id: "dining", name: "Dining out", budget: 260, color: "coral" },
-      { id: "transport", name: "Transport", budget: 220, color: "teal" },
-      { id: "subscriptions", name: "Subscriptions", budget: 130, color: "gold" },
-      { id: "shopping", name: "Shopping", budget: 300, color: "gold" },
-      { id: "savings", name: "Savings", budget: 400, color: "teal" }
+      { id: "housing", name: "Housing", budget: 0, color: "teal" },
+      { id: "groceries", name: "Groceries", budget: 0, color: "teal" },
+      { id: "dining", name: "Dining out", budget: 0, color: "coral" },
+      { id: "transport", name: "Transport", budget: 0, color: "teal" },
+      { id: "subscriptions", name: "Subscriptions", budget: 0, color: "gold" },
+      { id: "shopping", name: "Shopping", budget: 0, color: "gold" },
+      { id: "savings", name: "Savings", budget: 0, color: "teal" }
     ],
-    transactions: [
-      { id: "tx-1001", date: "2026-08-01", merchant: "Northstar Apartments", amount: -1850, category: "Housing", account: "checking" },
-      { id: "tx-1002", date: "2026-08-02", merchant: "Fresh Basket", amount: -126.40, category: "Groceries", account: "checking" },
-      { id: "tx-1003", date: "2026-08-03", merchant: "CloudBox Pro", amount: -24.99, category: "Subscriptions", account: "credit" },
-      { id: "tx-1004", date: "2026-08-04", merchant: "Brew & Bloom", amount: -18.60, category: "Dining out", account: "credit" },
-      { id: "tx-1005", date: "2026-08-05", merchant: "MetroPass", amount: -72, category: "Transport", account: "checking" },
-      { id: "tx-1006", date: "2026-08-06", merchant: "StreamFlix", amount: -17.99, category: "Subscriptions", account: "credit" },
-      { id: "tx-1007", date: "2026-08-08", merchant: "Market Street Grocer", amount: -94.18, category: "Groceries", account: "checking" },
-      { id: "tx-1008", date: "2026-08-10", merchant: "Saffron Table", amount: -86.50, category: "Dining out", account: "credit" },
-      { id: "tx-1009", date: "2026-08-11", merchant: "FitNow", amount: -39.00, category: "Subscriptions", account: "credit" },
-      { id: "tx-1010", date: "2026-08-13", merchant: "Home & Co.", amount: -162.75, category: "Shopping", account: "credit" },
-      { id: "tx-1011", date: "2026-08-15", merchant: "Payday deposit", amount: 4200, category: "Income", account: "checking", type: "income" },
-      { id: "tx-1012", date: "2026-08-17", merchant: "Brew & Bloom", amount: -16.40, category: "Dining out", account: "credit" },
-      { id: "tx-1013", date: "2026-08-18", merchant: "Fresh Basket", amount: -141.23, category: "Groceries", account: "checking" },
-      { id: "tx-1014", date: "2026-08-20", merchant: "CloudBox Pro", amount: -24.99, category: "Subscriptions", account: "credit" },
-      { id: "tx-1015", date: "2026-08-22", merchant: "Saffron Table", amount: -112.80, category: "Dining out", account: "credit" },
-      { id: "tx-1016", date: "2026-07-03", merchant: "CloudBox Pro", amount: -24.99, category: "Subscriptions", account: "credit" },
-      { id: "tx-1017", date: "2026-07-06", merchant: "StreamFlix", amount: -17.99, category: "Subscriptions", account: "credit" },
-      { id: "tx-1018", date: "2026-07-09", merchant: "FitNow", amount: -39.00, category: "Subscriptions", account: "credit" }
-    ],
+    transactions: [],
     pendingPlans: [],
     undoStack: [],
-    activity: [
-      { actor: "system", text: "Mock ledger loaded for August 2026.", time: new Date() },
-      { actor: "system", text: "Waiting for your co-pilot to inspect the ledger.", time: new Date() }
-    ],
+    activity: [],
     highlightedTransactionId: null,
     budgetHighlight: null
   };
@@ -85,6 +61,7 @@
     $("total-balance").textContent = formatMoney(total);
     $("monthly-spend").textContent = formatMoney(expenses);
     $("available-to-plan").textContent = formatMoney(available);
+    $("account-count").textContent = `${state.accounts.length} ${state.accounts.length === 1 ? "empty account" : "accounts"}`;
     $("spend-foot").textContent = `${formatMoney(budget)} total category budget`;
     $("spend-foot").className = `metric-foot ${expenses > budget ? "warning" : ""}`;
   }
@@ -121,7 +98,7 @@
   function renderActivity() {
     const undoButton = $("undo-agent-change");
     if (undoButton) undoButton.disabled = state.undoStack.length === 0;
-    $("activity-log").innerHTML = state.activity.slice().reverse().map((item) => `<div class="activity-item ${item.actor === "agent" ? "agent" : item.actor === "human" ? "human" : ""}"><span class="activity-marker"></span><div><strong>${escapeHtml(item.text)}</strong><time>${escapeHtml(item.actor === "agent" ? "Agent · " : item.actor === "human" ? "You · " : "System · ")}${escapeHtml(item.time instanceof Date ? nowOrDate(item.time) : item.time)}</time></div></div>`).join("");
+    $("activity-log").innerHTML = state.activity.length ? state.activity.slice().reverse().map((item) => `<div class="activity-item ${item.actor === "agent" ? "agent" : item.actor === "human" ? "human" : ""}"><span class="activity-marker"></span><div><strong>${escapeHtml(item.text)}</strong><time>${escapeHtml(item.actor === "agent" ? "Agent · " : item.actor === "human" ? "You · " : "System · ")}${escapeHtml(item.time instanceof Date ? nowOrDate(item.time) : item.time)}</time></div></div>`).join("") : '<div class="empty-state"><strong>No activity yet</strong><span>Your actions and agent calls will appear here.</span></div>';
   }
 
   function nowOrDate(date) { return date.toDateString() === new Date().toDateString() ? new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(date) : fullDateFormatter.format(date); }
@@ -281,18 +258,19 @@
       subscriptions: { name: "flag_anomaly", args: {} },
       anomalies: { name: "flag_anomaly", args: {} },
       reallocation: { name: "simulate_reallocation", args: { moves: [{ fromCategory: "Dining out", toCategory: "Savings", amount: 100 }] } },
-      categorize: { name: "categorize_transaction", args: { id: "tx-1015", category: "Shopping" } },
+      categorize: { name: "categorize_transaction", args: null },
       budget: { name: "set_budget", args: { category: "Groceries", monthlyLimit: 500 } }
     };
     const playgroundConsole = $("tool-playground-console");
     document.querySelectorAll("[data-tool-preset]").forEach((button) => button.addEventListener("click", async () => {
       const preset = playgroundPresets[button.dataset.toolPreset];
       if (!preset || !window.LedgerLab) return;
-      const call = `> ${preset.name}(${JSON.stringify(preset.args)})`;
+      const args = button.dataset.toolPreset === "categorize" ? { id: state.transactions[0]?.id || "add-a-transaction-first", category: "Shopping" } : preset.args;
+      const call = `> ${preset.name}(${JSON.stringify(args)})`;
       button.disabled = true;
       playgroundConsole.textContent = `${call}\n\n✦ Running…`;
       try {
-        const result = await Promise.resolve(window.LedgerLab.executeTool(preset.name, preset.args));
+        const result = await Promise.resolve(window.LedgerLab.executeTool(preset.name, args));
         playgroundConsole.textContent = `${call}\n\n✦ ${JSON.stringify(result, null, 2)}`;
       } catch (error) {
         playgroundConsole.textContent = `${call}\n\n✦ ${JSON.stringify({ ok: false, error: error.message || "Tool call failed" }, null, 2)}`;

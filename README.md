@@ -1,6 +1,6 @@
 # LedgerLab
 
-LedgerLab is a static, WebMCP-enabled personal budget co-pilot for the OpenAI WebMCP Challenge. It uses fictional transaction and account data seeded in `app.js`, so there is no banking connection, backend, or network request.
+LedgerLab is a static, WebMCP-enabled personal budget co-pilot for the OpenAI WebMCP Challenge. The live workspace starts fresh with an empty account, zeroed category templates, and no transactions. Any data a visitor enters is fictional and stays in the page; there is no banking connection, backend, or network request. The landing-page playground uses a separate fictional sandbox so the collaboration loop remains easy to demonstrate.
 
 ## Why WebMCP fits
 
@@ -24,7 +24,7 @@ No install or build step is needed. Serve this directory over HTTP so browser AP
 python -m http.server 8080
 ```
 
-Then open [http://localhost:8080](http://localhost:8080). Opening `index.html` directly also renders the UI, but an HTTP server is recommended for browser testing.
+Then open [http://localhost:8080](http://localhost:8080) for the landing page or [http://localhost:8080/app.html](http://localhost:8080/app.html) for the fresh ledger. An HTTP server is recommended for browser testing.
 
 ## Test WebMCP
 
@@ -40,13 +40,13 @@ The list should contain `get_transactions`, `get_categories`, `flag_anomaly`, `s
 
 Walkthrough:
 
-1. Run the subscription prompt. The agent reads the ledger, then calls `simulate_reallocation`; a proposal appears under **Pending agent plan**. Click **Approve changes** and watch both category budgets and the activity log update.
+1. Add a few fictional transactions and set category budgets in the fresh workspace, or use the landing-page sandbox. Run the subscription prompt. The agent reads the ledger, then calls `simulate_reallocation`; a proposal appears under **Pending agent plan**. Click **Approve changes** and watch both category budgets and the activity log update.
 2. Run the anomaly prompt. The agent should receive recurring subscription findings and dining/shopping outlier evidence without needing to scrape the table.
 3. Run the restaurant prompt. The agent can call `get_categories` and `get_transactions`, explain the overspend, and propose a move. Reject or approve the resulting card.
 
 ## WebMCP implementation
 
-Tools are registered on `DOMContentLoaded` after the seeded state is available:
+Tools are registered on `DOMContentLoaded` after the empty workspace state is available:
 
 ```js
 document.modelContext.registerTool({
@@ -63,9 +63,10 @@ If `document.modelContext` is unavailable, registration is skipped safely and th
 
 ## Files
 
-- `index.html` — accessible dashboard markup and transaction dialog
+- `index.html` — marketing experience and fictional tool sandbox
+- `app.html` — accessible fresh dashboard markup and transaction dialog
 - `styles.css` — responsive visual system
-- `app.js` — seeded state, UI rendering, human controls, and WebMCP tools
+- `app.js` — fresh workspace state, UI rendering, human controls, and WebMCP tools
 - `LICENSE` — MIT license
 
 LedgerLab is a fictional demo. It is not financial advice and does not connect to real accounts.

@@ -106,3 +106,131 @@ h2 { margin: 0; color: var(--navy); font-size: 19px; letter-spacing: -.035em; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 @media (max-width: 900px) { .app-shell { padding: 0 22px 30px; }.dashboard-grid { grid-template-columns: 1fr; }.hero-row { align-items: stretch; flex-direction: column; }.agent-status-card { align-self: flex-start; }.about-section { grid-template-columns: 42px 1fr; }.about-links { grid-column: 2; flex-direction: row; gap: 18px; }.footer { flex-direction: column; } }
 @media (max-width: 600px) { .app-shell { padding: 0 14px 24px; }.topbar { height: 68px; }.period-pill { display: none; }.main-content { padding-top: 8px; }.hero-row { padding: 23px 0 26px; }.metric-grid { grid-template-columns: 1fr; gap: 10px; }.metric-card { min-height: 114px; }.metric-value { margin-top: 10px; }.panel-header { padding-left: 16px; padding-right: 16px; }.accounts-list, .category-list, .plans-list, .activity-log, .webmcp-diagnostics-body { padding-left: 16px; padding-right: 16px; }.webmcp-diagnostics-body { align-items: flex-start; flex-direction: column; gap: 12px; }.diagnostic-status { min-width: 0; }.transactions-header { align-items: flex-start; flex-direction: column; }.transactions-header .button { width: 100%; }.table-wrap { margin: 0 -1px; } th, td { padding-right: 12px; padding-left: 12px; }.actions-cell { width: 70px; }.row-actions { opacity: 1; }.category-chip { white-space: nowrap; }.about-section { grid-template-columns: 1fr; gap: 12px; padding: 18px; }.about-links { grid-column: 1; }.tool-playground { padding: 18px; }.tool-playground-badge { display: none; }.tool-playground-console { min-height: 180px; }.form-grid { grid-template-columns: 1fr; }.full-field { grid-column: auto; }.toast-region { right: 14px; bottom: 14px; left: 14px; }.toast { max-width: none; } }
+
+/* Financial operating-system dashboard theme shared with the landing page. */
+.app-os-theme {
+  --navy: #171714;
+  --navy-2: #25241f;
+  --ink: #171714;
+  --muted: #6f7069;
+  --line: #d8d3c5;
+  --surface: #f8f6ee;
+  --surface-soft: #ece8dc;
+  --teal: #f2b705;
+  --teal-dark: #765a00;
+  --mint: #fff0a6;
+  --coral: #d8644c;
+  --coral-soft: #f8ddd4;
+  --gold: #f2b705;
+  --shadow: 0 16px 38px rgba(0, 0, 0, .16);
+  color: var(--ink);
+  background:
+    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
+    #11110f;
+  background-size: 24px 24px;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.app-os-theme .app-shell { max-width: 1480px; padding-right: 32px; padding-left: 32px; }
+.app-os-theme .topbar { color: #f8f6ee; border-bottom: 1px solid rgba(255, 255, 255, .11); }
+.app-os-theme .brand { color: #f8f6ee; font-family: "Space Grotesk", sans-serif; font-weight: 600; }
+.app-os-theme .brand-mark,
+.app-os-theme .about-mark { color: #171714; background: #f2b705; border-radius: 6px; box-shadow: none; }
+.app-os-theme .brand-accent { color: #f2b705; }
+.app-os-theme .period-pill { color: #c9c5b9; background: #1c1c18; border-color: #3a3932; border-radius: 7px; font-family: "IBM Plex Mono", monospace; font-size: 10px; }
+.app-os-theme .status-dot,
+.app-os-theme .live-dot { background: #f2b705; box-shadow: 0 0 0 3px rgba(242, 183, 5, .17), 0 0 12px rgba(242, 183, 5, .4); }
+.app-os-theme .avatar { color: #171714; background: #f2b705; border-radius: 7px; }
+.app-os-theme .main-content { max-width: 1280px; margin: 0 auto; }
+.app-os-theme .hero-row { min-height: 260px; padding: 50px 0 42px; }
+.app-os-theme h1,
+.app-os-theme .hero-row h2 { color: #f8f6ee; font-family: "Space Grotesk", sans-serif; font-weight: 500; }
+.app-os-theme h1 { max-width: 720px; font-size: clamp(38px, 5vw, 64px); }
+.app-os-theme h2 { font-family: "Space Grotesk", sans-serif; font-weight: 600; }
+.app-os-theme .hero-copy { color: #aaa79e; }
+.app-os-theme .eyebrow,
+.app-os-theme .section-kicker,
+.app-os-theme .micro-label { color: #8c8d85; font-family: "IBM Plex Mono", monospace; font-weight: 500; }
+.app-os-theme .hero-row .eyebrow { color: #f2b705; }
+.app-os-theme .agent-status-card { color: #f8f6ee; background: #1b1b17; border: 1px solid #3b3931; border-radius: 8px; box-shadow: 0 20px 48px rgba(0, 0, 0, .28); }
+.app-os-theme .agent-orb { color: #171714; background: #f2b705; border-radius: 6px; }
+.app-os-theme .agent-status-card .micro-label { color: #f2b705; }
+.app-os-theme .agent-status-card .muted { color: #97948b; }
+.app-os-theme .webmcp-banner { color: #f8e7a1; background: #2a2412; border-color: #66531a; border-radius: 7px; }
+.app-os-theme .panel,
+.app-os-theme .metric-card { background: #f4f1e8; border-color: #cbc6b8; border-radius: 8px; box-shadow: var(--shadow); }
+.app-os-theme .webmcp-panel { color: #f8f6ee; background: #1b1b17; border-color: #3b3931; }
+.app-os-theme .webmcp-panel h2 { color: #f8f6ee; }
+.app-os-theme .webmcp-panel .panel-subtitle,
+.app-os-theme .webmcp-panel .diagnostic-status { color: #9f9c92; }
+.app-os-theme .webmcp-panel .button-ghost { color: #171714; background: #f2b705; }
+.app-os-theme .webmcp-tool-list li { color: #f6d55e; background: rgba(242, 183, 5, .09); border-color: rgba(242, 183, 5, .27); border-radius: 5px; font-family: "IBM Plex Mono", monospace; }
+.app-os-theme .diagnostic-dot,
+.app-os-theme .diagnostic-dot.success { background: #f2b705; box-shadow: 0 0 0 4px rgba(242, 183, 5, .14); }
+.app-os-theme .metric-card-primary { color: #171714; background: #f2b705; border-color: #f2b705; }
+.app-os-theme .metric-card-primary .metric-heading,
+.app-os-theme .metric-card-primary .metric-value,
+.app-os-theme .metric-card-primary .metric-foot { color: #171714; }
+.app-os-theme .metric-value { font-family: "Space Grotesk", sans-serif; font-weight: 600; }
+.app-os-theme .metric-icon { color: #171714; background: #f2b705; border-radius: 5px; }
+.app-os-theme .metric-card-primary .metric-icon { color: #f2b705; background: #171714; }
+.app-os-theme .metric-icon.coral { color: #8e321f; background: #f3cbbb; }
+.app-os-theme .metric-icon.gold { color: #171714; background: #f2b705; }
+.app-os-theme .count-badge { color: #171714; background: #f2b705; border-radius: 5px; }
+.app-os-theme .account-icon,
+.app-os-theme .merchant-icon { color: #171714; background: #e2dccb; border-radius: 5px; }
+.app-os-theme .bar-track { background: #d9d4c6; border-radius: 2px; }
+.app-os-theme .bar-fill { background: #f2b705; border-radius: 2px; }
+.app-os-theme .bar-fill.over { background: #d8644c; }
+.app-os-theme .budget-line input { background: #fffdf6; border-color: #c9c2b1; border-radius: 4px; }
+.app-os-theme .budget-line button { color: #171714; background: #f2b705; border-radius: 4px; }
+.app-os-theme .budget-line button:hover { background: #dca600; }
+.app-os-theme .empty-icon { color: #171714; background: #f2b705; border-radius: 5px; }
+.app-os-theme .plan-card { background: #fff8d9; border-color: #d5bd5c; border-radius: 6px; }
+.app-os-theme .projected-note { color: #544510; background: #f4e9ae; border-radius: 4px; }
+.app-os-theme .move-arrow { color: #9a7300; }
+.app-os-theme .button { border-radius: 5px; font-family: "IBM Plex Mono", monospace; font-weight: 600; }
+.app-os-theme .button-primary { color: #171714; background: #f2b705; box-shadow: none; }
+.app-os-theme .button-primary:hover { background: #dca600; }
+.app-os-theme .button-ghost { color: #4f4e48; background: #dfdbd0; }
+.app-os-theme th { color: #6f7069; background: #e7e2d6; font-family: "IBM Plex Mono", monospace; }
+.app-os-theme tbody tr:hover { background: #fff9dd; }
+.app-os-theme tbody tr.row-highlight { background: #fff0a6; }
+.app-os-theme .category-chip { color: #4f420f; background: #efe4ad; border-radius: 4px; }
+.app-os-theme .about-section { background: #f2b705; border-color: #f2b705; border-radius: 8px; }
+.app-os-theme .about-section p:not(.section-kicker) { color: #41350b; }
+.app-os-theme .about-section .section-kicker,
+.app-os-theme .about-links a { color: #171714; }
+.app-os-theme .tool-playground { background:
+  radial-gradient(circle at 86% 0%, rgba(242, 183, 5, .18), transparent 30%),
+  linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px),
+  #171714;
+  background-size: auto, 20px 20px, 20px 20px, auto;
+  border-color: #454238;
+  border-radius: 8px;
+}
+.app-os-theme .tool-playground::after { background: radial-gradient(circle, rgba(242, 183, 5, .24), transparent 68%); }
+.app-os-theme .tool-playground-icon { color: #f2b705; background: rgba(242, 183, 5, .1); border-color: rgba(242, 183, 5, .3); border-radius: 5px; }
+.app-os-theme .tool-playground .section-kicker,
+.app-os-theme .tool-playground-badge,
+.app-os-theme .tool-playground-badge span { color: #f2b705; }
+.app-os-theme .tool-playground-badge span { background: #f2b705; }
+.app-os-theme .tool-playground-caption { color: #aaa79e; }
+.app-os-theme .tool-playground-chips button { color: #d6d2c8; background: #23231f; border-color: #48463d; border-radius: 5px; font-family: "IBM Plex Mono", monospace; }
+.app-os-theme .tool-playground-chips button:hover { color: #171714; background: #f2b705; }
+.app-os-theme .tool-playground-console { color: #f6d55e; background: #0d0d0b; border-color: #3b3931; border-radius: 5px; font-family: "IBM Plex Mono", monospace; }
+.app-os-theme .footer { padding-top: 8px; color: #8f8c84; border-top: 1px solid #302f2a; font-family: "IBM Plex Mono", monospace; }
+.app-os-theme .toast { color: #171714; background: #f2b705; border-radius: 5px; }
+.app-os-theme .toast.success::before { color: #f2b705; background: #171714; }
+.app-os-theme .transaction-dialog { background: #f4f1e8; border: 1px solid #c6c0b2; border-radius: 8px; }
+.app-os-theme .transaction-dialog::backdrop { background: rgba(0, 0, 0, .68); }
+.app-os-theme .form-grid input,
+.app-os-theme .form-grid select { background: #fffdf6; border-color: #c9c2b1; border-radius: 4px; }
+.app-os-theme .form-grid input:focus,
+.app-os-theme .form-grid select:focus { border-color: #f2b705; box-shadow: 0 0 0 3px rgba(242, 183, 5, .2); }
+@media (max-width: 600px) {
+  .app-os-theme .app-shell { padding-right: 14px; padding-left: 14px; }
+  .app-os-theme .hero-row { min-height: 0; padding-top: 34px; }
+  .app-os-theme h1 { font-size: 42px; }
+}

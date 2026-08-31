@@ -267,7 +267,40 @@
     if (action === "delete-transaction") { const tx = transactionById(target.dataset.id); if (tx && window.confirm(`Delete ${tx.merchant}?`)) { const account = state.accounts.find((item) => item.id === tx.account); if (account) account.balance -= tx.amount; state.transactions = state.transactions.filter((item) => item.id !== tx.id); render(); toast("Transaction deleted"); logActivity(`You deleted ${tx.merchant}.`, "human"); } }
   }
 
-  document.addEventListener("DOMContentLoaded", () => { render(); registerWebMCP(); $("refresh-webmcp-tools").addEventListener("click", () => refreshWebMCPDiagnostics()); document.addEventListener("click", handleClick); $("undo-agent-change").addEventListener("click", undoLastAgentChange); $("add-transaction-button").addEventListener("click", () => transactionDialog("add")); $("transaction-form").addEventListener("submit", saveTransaction); $("cancel-dialog").addEventListener("click", () => $("transaction-dialog").close()); $("close-dialog").addEventListener("click", () => $("transaction-dialog").close()); });
+  document.addEventListener("DOMContentLoaded", () => {
+    render(); registerWebMCP();
+    $("refresh-webmcp-tools").addEventListener("click", () => refreshWebMCPDiagnostics());
+    document.addEventListener("click", handleClick);
+    $("undo-agent-change").addEventListener("click", undoLastAgentChange);
+    $("add-transaction-button").addEventListener("click", () => transactionDialog("add"));
+    $("transaction-form").addEventListener("submit", saveTransaction);
+    $("cancel-dialog").addEventListener("click", () => $("transaction-dialog").close());
+    $("close-dialog").addEventListener("click", () => $("transaction-dialog").close());
+
+    const playgroundPresets = {
+      subscriptions: { name: "flag_anomaly", args: {} },
+      anomalies: { name: "flag_anomaly", args: {} },
+      reallocation: { name: "simulate_reallocation", args: { moves: [{ fromCategory: "Dining out", toCategory: "Savings", amount: 100 }] } },
+      categorize: { name: "categorize_transaction", args: { id: "tx-1015", category: "Shopping" } },
+      budget: { name: "set_budget", args: { category: "Groceries", monthlyLimit: 500 } }
+    };
+    const playgroundConsole = $("tool-playground-console");
+    document.querySelectorAll("[data-tool-preset]").forEach((button) => button.addEventListener("click", async () => {
+      const preset = playgroundPresets[button.dataset.toolPreset];
+      if (!preset || !window.LedgerLab) return;
+      const call = `> ${preset.name}(${JSON.stringify(preset.args)})`;
+      button.disabled = true;
+      playgroundConsole.textContent = `${call}\n\n✦ Running…`;
+      try {
+        const result = await Promise.resolve(window.LedgerLab.executeTool(preset.name, preset.args));
+        playgroundConsole.textContent = `${call}\n\n✦ ${JSON.stringify(result, null, 2)}`;
+      } catch (error) {
+        playgroundConsole.textContent = `${call}\n\n✦ ${JSON.stringify({ ok: false, error: error.message || "Tool call failed" }, null, 2)}`;
+      } finally {
+        button.disabled = false;
+      }
+    }));
+  });
 
   window.LedgerLab = { state, tools: toolDefinitions.map((tool) => tool.name), executeTool: (name, args) => toolExecutors[name] ? toolExecutors[name](args) : { ok: false, error: "Unknown tool" } };
 }());

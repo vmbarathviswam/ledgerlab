@@ -14,7 +14,7 @@ Paste any of these into an agent that can call the page's WebMCP tools:
 2. “Flag anything unusual in my spending this month.”
 3. “Show my restaurant overspend and suggest a fix.”
 
-For a visible write demo, you can also ask: “Move transaction tx-1015 from Dining out to Shopping if that looks more accurate.” The row highlights immediately after the agent changes it.
+For a visible write demo in the landing-page sandbox, ask: “Recategorize tx-1015 from Dining out to Shopping.” The row highlights immediately after the agent changes it.
 
 ## Run locally
 
@@ -63,10 +63,15 @@ If `document.modelContext` is unavailable, registration is skipped safely and th
 
 ## Files
 
-- `index.html` — marketing experience and fictional tool sandbox
-- `app.html` — accessible fresh dashboard markup and transaction dialog
-- `styles.css` — responsive visual system
-- `app.js` — fresh workspace state, UI rendering, human controls, and WebMCP tools
+- `index.html` — canonical marketing page and seeded fictional WebMCP tool sandbox
+- `landing.css` — responsive layout and component styles for the marketing page
+- `os-theme.css` — financial operating-system theme overrides for the marketing page
+- `landing.js` — seeded sandbox state, playground interactions, and landing-page WebMCP tools
+- `app.html` — working WebMCP dashboard with the fresh ledger and transaction dialog
+- `styles.css` — responsive visual system for the dashboard
+- `app.js` — fresh workspace state, dashboard rendering, human controls, and WebMCP tools
+- `_redirects` — Cloudflare Pages redirects for legacy landing-page URLs
+- `README.md` — project overview, local setup, testing guidance, and file inventory
 - `LICENSE` — MIT license
 
 LedgerLab is a fictional demo. It is not financial advice and does not connect to real accounts.

@@ -222,6 +222,14 @@
     } else if (snapshot.type === "set_budget") {
       const category = categoryByName(snapshot.category);
       if (category) { const currentLimit = category.budget; category.budget = snapshot.previousMonthlyLimit; render(); highlightBudget(category.name); toast("Last agent change undone"); logActivity(`You undid the agent's ${category.name} budget change from ${formatMoney(currentLimit)} to ${formatMoney(category.budget)}.`, "human"); }
+    } else if (snapshot.type === "approved_plan") {
+      for (const move of snapshot.moves) {
+        const from = categoryByName(move.fromCategory);
+        const to = categoryByName(move.toCategory);
+        toolExecutors.set_budget({ category: from.name, monthlyLimit: from.budget + move.amount }, "Undo");
+        toolExecutors.set_budget({ category: to.name, monthlyLimit: to.budget - move.amount }, "Undo");
+      }
+      logActivity("You undid the agent's approved reallocation plan.", "human");
     }
   }
 
@@ -240,7 +248,10 @@
 
   function approvePlan(planId) {
     const plan = state.pendingPlans.find((item) => item.id === planId); if (!plan) return;
+    const undoStackStart = state.undoStack.length;
     for (const move of plan.moves) { const from = categoryByName(move.fromCategory); const to = categoryByName(move.toCategory); toolExecutors.set_budget({ category: from.name, monthlyLimit: from.budget - move.amount }, "Approved plan"); toolExecutors.set_budget({ category: to.name, monthlyLimit: to.budget + move.amount }, "Approved plan"); }
+    state.undoStack.splice(undoStackStart);
+    state.undoStack.push({ type: "approved_plan", planId: plan.id, moves: plan.moves.map((move) => ({ fromCategory: categoryByName(move.fromCategory).name, toCategory: categoryByName(move.toCategory).name, amount: move.amount })) });
     state.pendingPlans = state.pendingPlans.filter((item) => item.id !== planId); renderPlans(); toast("Plan approved — budgets updated"); logActivity("You approved the agent's reallocation plan.", "human");
   }
 

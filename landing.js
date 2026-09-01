@@ -114,7 +114,9 @@
 
   function registerLandingTools() {
     const context = [document.modelContext, typeof navigator !== "undefined" ? navigator.modelContext : null, typeof navigator !== "undefined" ? navigator.modelContextTesting : null, typeof window !== "undefined" ? window.modelContext : null].find((candidate) => candidate && typeof candidate.registerTool === "function");
-    if (!context) return;
+    const banner = $("webmcp-banner");
+    if (!context) { banner?.classList.remove("is-hidden"); return; }
+    banner?.classList.add("is-hidden");
     const definitions = [
       ["get_transactions", "Read the fictional LedgerLab transactions when the agent needs ledger evidence.", { type: "object", properties: { category: { type: "string" }, period: { type: "string" } }, additionalProperties: false }],
       ["get_categories", "Read current fictional category budgets and spending before making a recommendation.", { type: "object", properties: {}, additionalProperties: false }],

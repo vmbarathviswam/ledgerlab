@@ -130,14 +130,21 @@
     get_transactions(args = {}) {
       const category = args.category ? String(args.category).toLowerCase() : null;
       const period = args.period ? String(args.period) : null;
-      return state.transactions.filter((tx) => (!period || tx.date.startsWith(period)) && (!category || tx.category.toLowerCase() === category)).map(transactionResult);
+      const transactions = state.transactions.filter((tx) => (!period || tx.date.startsWith(period)) && (!category || tx.category.toLowerCase() === category)).map(transactionResult);
+      logActivity("Agent read transactions" + (args.category ? ` for category "${args.category}"` : "") + (args.period ? ` in ${args.period}` : "") + ".", "agent");
+      return transactions;
     },
-    get_categories() { return state.categories.map((category) => ({ category: category.name, monthlyLimit: category.budget, spent: Number(categorySpent(category.name, DEMO_PERIOD).toFixed(2)), remaining: Number((category.budget - categorySpent(category.name, DEMO_PERIOD)).toFixed(2)) })); },
+    get_categories() {
+      const categories = state.categories.map((category) => ({ category: category.name, monthlyLimit: category.budget, spent: Number(categorySpent(category.name, DEMO_PERIOD).toFixed(2)), remaining: Number((category.budget - categorySpent(category.name, DEMO_PERIOD)).toFixed(2)) }));
+      logActivity("Agent read category budgets and spending.", "agent");
+      return categories;
+    },
     flag_anomaly() {
       const findings = [];
       const merchants = [...new Set(state.transactions.map((tx) => tx.merchant))];
       merchants.forEach((merchant) => { const matching = state.transactions.filter((tx) => tx.merchant === merchant && isExpense(tx)); if (matching.length >= 2 && ["cloudbox pro", "streamflix", "fitnow", "musicwave", "newsly"].includes(merchant.toLowerCase())) findings.push({ type: "recurring_subscription", merchant, monthlyAmount: Number((matching.slice(0, 3).reduce((sum, tx) => sum + expenseValue(tx), 0) / Math.min(3, matching.length)).toFixed(2)), occurrences: matching.length, note: "Recurring charge detected" }); });
       state.categories.forEach((category) => { const values = state.transactions.filter((tx) => tx.category === category.name && isExpense(tx)).map(expenseValue); if (values.length >= 3) { const average = values.reduce((a, b) => a + b, 0) / values.length; const outlier = Math.max(...values); if (outlier > average * 1.8) findings.push({ type: "outlier", category: category.name, amount: outlier, average: Number(average.toFixed(2)), note: "One charge is substantially above this category's typical transaction" }); } });
+      logActivity("Agent inspected the ledger for anomalies.", "agent");
       return findings;
     },
     simulate_reallocation(args = {}) {
@@ -172,6 +179,7 @@
   function transactionResult(tx) { return { id: tx.id, date: tx.date, merchant: tx.merchant, amount: tx.amount, category: tx.category, account: tx.account }; }
 
   function registerWebMCP() {
+    const banner = $("webmcp-banner");
     const candidates = [
       document.modelContext,
       typeof navigator !== "undefined" ? navigator.modelContext : null,
@@ -180,8 +188,9 @@
     ];
     const context = candidates.find((candidate) => candidate && typeof candidate.registerTool === "function");
     if (!context || typeof context.registerTool !== "function") {
-      $("webmcp-banner").classList.remove("is-hidden"); $("agent-status").textContent = "WebMCP unavailable"; $("tool-count").textContent = "Use the app manually or enable WebMCP"; return;
+      banner.classList.remove("is-hidden"); $("agent-status").textContent = "WebMCP unavailable"; $("tool-count").textContent = "Use the app manually or enable WebMCP"; return;
     }
+    banner.classList.add("is-hidden");
     toolDefinitions.forEach((definition) => context.registerTool({ ...definition, execute: async (args) => toolExecutors[definition.name](args || {}) }));
     $("agent-status").textContent = "WebMCP connected"; $("tool-count").textContent = `${toolDefinitions.length} structured tools ready`;
     logActivity(`${toolDefinitions.length} structured tools registered for your agent.`, "system");
